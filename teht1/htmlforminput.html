@@ -1,34 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>HTML Form input</title>
-</head>
 
-<body>
+    <script>
+      function showResults(event) {
+        event.preventDefault();
+        let errors = [];
+        // Empty result and errors if pressed the Send button again
+        document.getElementById("id_result").innerText = "";
+        document.getElementById("id_errors").innerText = "";
 
-<!--
-Make a web page, which as a following form with according labels and input elements:
-Full Name, a required text field with autofocus and placeholder 60 characters size, max 80 characters
-Password, a required password field, accepts 8-20 characters: a-z, A-Z, 0-9 and following punctuation characters _,.-:;?!
-Password again, same specification as above, must match the above field in value
-Gender, required, radio selections, choices: male, female, other
-Hobbies, a checkbox selection (can select zero to many): games, music, sports, TV
-Birth Date, date field
-Height, a range input from 40 to 300 cm. A linked number field showing the numerical value and allow to input exact number. In other words both the number field and range field show the same value, changing one will automatically change the other.
+        let fullname = document.getElementById("id_fullname").value;
+        if (fullname.length === 0 || fullname.length > 80) {
+          errors.push(
+            `Please provide name with length between 1 and 80 characters.\n`
+          );
+        }
+
+        let password = document.getElementById("id_password").value;
+        if (password.match(/^([a-z0-9_,.-:;?!]{8,20})$/)) {
+          console.log("Password ok");
+        } else {
+          errors.push(`Please provide a valid password.\n`);
+        }
+
+        if (password != document.getElementById("id_password2").value) {
+          errors.push(`Passwords do not match.\n`);
+        }
+
+        let gender = "";
+        for (let genderChoice of document.getElementsByName("gender")) {
+          if (genderChoice.checked) {
+            gender = genderChoice.value;
+            if (gender === "f") {
+              gender = "Female";
+            } else if (gender === "m") {
+              gender = "Male";
+            } else {
+              gender = "Other gender";
+            }
+          }
+        }
+        if (gender.length === 0) {
+          errors.push(`No gender selected.\n`);
+        }
+
+        let hobbies = [];
+        for (let hobbyChoice of document.getElementsByName("hobbies")) {
+          if (hobbyChoice.checked) {
+            hobbies.push(hobbyChoice.value);
+          }
+        }
+
+        let birthday = document.getElementById("id_birthdate").value;
+
+        if (errors.length === 0) {
+          let result =
+            `Form has been validated:\n` +
+            `Full name = ${fullname}\n` +
+            `Password = ${password}\n` +
+            `Password validation = ${
+              document.getElementById("id_password2").value
+            }\n` +
+            `Gender = ${gender}\n` +
+            `Hobbies = ${hobbies.join(", ")}\n` +
+            `Birthday = ${birthday}\n`;
+          document.getElementById("id_result").innerText = result;
+        } else {
+          document.getElementById("id_errors").innerText = errors.join("");
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <form id="myForm" onsubmit="showResults(event)">
+      <!-- Full name, required, autofocus, placeholder, 60 characters size, max 80 characters -->
+      <label for="id_fullname">Full name (required):</label>
+      <input
+        type="text"
+        name="fullname"
+        id="id_fullname"
+        size="60"
+        placeholder="Firstname Lastname"
+        maxlength="80"
+        required
+        autofocus
+      />
+      <br />
+
+      <!-- Password, password field, required, 8-20 characters a-z, A-Z, 0-9, with _,.-:;?! -->
+      <label for="id_password">Password (required):</label>
+      <input
+        type="password"
+        id="id_password"
+        size="60"
+        placeholder="Password"
+        required
+      />
+      <br />
+
+      <!-- Password again, same validation, must mach the above field in value -->
+      <label for="id_password2">Password (required):</label>
+      <input
+        type="password"
+        id="id_password2"
+        size="60"
+        placeholder="Type password again"
+        required
+      />
+      <br />
+
+      <!-- Gender, required, radio selection, male female other-->
+      <fieldset>
+        <legend>Gender (required):</legend>
+        <input type="radio" name="gender" value="m" id="id_male" />
+        <label for="id_male">male</label>
+        <input type="radio" name="gender" value="f" id="id_female" />
+        <label for="id_female">female</label>
+        <input type="radio" name="gender" value="o" id="id_other" />
+        <label for="id_other">other</label>
+      </fieldset>
+
+      <!-- Hobbies, checkbox, zero to many, games music sports TV -->
+      <fieldset>
+        <legend>Hobbies</legend>
+        <input type="checkbox" name="hobbies" value="games" id="id_games" />
+        <label for="id_games">reading</label>
+        <input type="checkbox" name="hobbies" value="music" id="id_music" />
+        <label for="id_music">music</label>
+        <input type="checkbox" name="hobbies" value="sports" id="id_sports" />
+        <label for="id_sports">sports</label>
+        <input type="checkbox" name="hobbies" value="sports" id="id_tv" />
+        <label for="id_tv">tv</label>
+      </fieldset>
+
+      <!-- Birth date, date field -->
+      <label for="id_birthdate">Birth date:</label>
+      <input type="date" id="id_birthdate">
+
+      <!-- Height, range input 40-300 cm, linked number field showing numerical value-->
+
+      <!--
 Favorite color, standard 24-bit RGB color selector
 Home Country, <select><option> selector with Finland as default choice, also include Russia and other Scandinavian countries and Baltic countries as possible choices.
 Profession, datalist, with at least 4 predetermined choice e.g. teacher, nurse, plumber and bureaucrat
 Message, a text area, which is required and is by default 6 rows high and 60 columns wide. With placeholder and max length for input set to 1000 characters.
-There should also be a Send <button>. Pressing the button will validate the form and print out possible error messages if needed. If everything is valid and all required fields are given, then it a JavaScript function will print out all the input values to an output field. It should also be able to print out, what hobbies the user selected or what was the gender selection, not just contents of the text fields. The result of every input must be printed for complete solution.
 
-Tip: Use HTML5 form abilities to their fullest extend. Use regular expressions and/or pattern attribute to limit the password to certain length and characters.
 https://www.youtube.com/watch?time_continue=2&v=NW1GxwuFMGk&feature=emb_logo
 -->
-
-
-</body>
-
+      <br />
+      <!-- Send button, validate form, print possible error messaged, otherwise print results-->
+      <input type="submit" value="Send" onclick="showResults(event)" />
+      <hr />
+      <output id="id_result"></output>
+      <output id="id_errors" style="color: red"></output>
+    </form>
+  </body>
 </html>
