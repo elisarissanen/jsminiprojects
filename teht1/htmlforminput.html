@@ -56,6 +56,11 @@
         }
 
         let birthday = document.getElementById("id_birthdate").value;
+        let height = document.getElementById("id_height_input").value;
+        let color = document.getElementById("id_color").value;
+        let country = myForm.country.options[myForm.country.selectedIndex].text; 
+        let profession = document.getElementById("profession").value;
+        let message = document.getElementById("id_message").value;
 
         if (errors.length === 0) {
           let result =
@@ -67,7 +72,12 @@
             }\n` +
             `Gender = ${gender}\n` +
             `Hobbies = ${hobbies.join(", ")}\n` +
-            `Birthday = ${birthday}\n`;
+            `Birthday = ${birthday}\n` +
+            `Height = ${height}\n` +
+            `Favourite color = ${color}\n` +
+            `Home country = ${country}\n` +
+            `Profession = ${profession}\n` +
+            `Message = ${message}\n`;
           document.getElementById("id_result").innerText = result;
         } else {
           document.getElementById("id_errors").innerText = errors.join("");
@@ -140,18 +150,67 @@
 
       <!-- Birth date, date field -->
       <label for="id_birthdate">Birth date:</label>
-      <input type="date" id="id_birthdate">
+      <input type="date" id="id_birthdate" />
+      <br />
 
       <!-- Height, range input 40-300 cm, linked number field showing numerical value-->
+      <label for="id_height_input">Height (cm):</label>
+      <input
+        type="range"
+        id="id_height_input"
+        min="40"
+        max="300"
+        value="170"
+        oninput="id_height_output.value = this.value"
+      />
+      <input
+        type="number"
+        id="id_height_output"
+        value="170"
+        min="40"
+        max="300"
+        oninput="id_height_input.value = this.value"
+      />
+      <br />
 
-      <!--
-Favorite color, standard 24-bit RGB color selector
-Home Country, <select><option> selector with Finland as default choice, also include Russia and other Scandinavian countries and Baltic countries as possible choices.
-Profession, datalist, with at least 4 predetermined choice e.g. teacher, nurse, plumber and bureaucrat
-Message, a text area, which is required and is by default 6 rows high and 60 columns wide. With placeholder and max length for input set to 1000 characters.
+      <!-- Favourite colour, RGB color selection -->
+      <label for="id:color">Favourite color: </label>
+      <input type="color" id="id_color" value="#ff0000" />
+      <br>
 
-https://www.youtube.com/watch?time_continue=2&v=NW1GxwuFMGk&feature=emb_logo
--->
+      <!-- Home country, select,option selector, defautl Finland, Russia, Scandinavian countries, Baltic countries-->
+      <label for="country">Home country:</label>
+      <select name="country" id="country">
+        <option value="fi" selected>Finland</option>
+        <option value="ru">Russia</option>
+          <optgroup label="Scandinavia">
+              <option value="dk">Denmark</option>
+              <option value="no">Norway</option>
+              <option value="sv">Sweden</option>
+          </optgroup>
+          <optgroup label="Baltic">
+              <option value="ee">Estonia</option>
+              <option value="lv">Latvia</option>
+              <option value="lt">Lithuania</option>
+          </optgroup>
+      </select>
+      <br>
+
+      <!-- Profession datalist, at least 4 choices -->
+      <label for="profession">Profession:</label>
+        <input list="professions" id="profession" size="40">
+        <datalist id="professions">
+            <option value="nurse"></option>
+            <option value="teacher"></option>
+            <option value="plumber"></option>
+            <option value="bureaucrat"></option>
+        </datalist>
+        <br>
+
+        <!-- message text area, 6 rows 60 columns, placeholder, max length 1000 chars-->
+        <label for="id_message">Message:</label> <br>
+        <textarea id="id_message" rows="6" cols="60" maxlength="1000"></textarea>
+
       <br />
       <!-- Send button, validate form, print possible error messaged, otherwise print results-->
       <input type="submit" value="Send" onclick="showResults(event)" />
