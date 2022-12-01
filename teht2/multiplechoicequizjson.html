@@ -1,12 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Multiple choice quiz</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script>
+
+      $.ajax({
+        method: 'GET',
+        url: 'answerkey.json',
+        success: function (response){
+          makeQuestions(JSON.parse(JSON.stringify(response)));
+        }
+      })
+
+
+      // SELVITÄ VIDEOSTA MITÄ TÄÄ TEKEE
+      function makeIdName(questionIndex, choiceIndex) {
+        return `q_${questionIndex}_${choiceIndex}`;
+      }
+
+      function makeQuestions(questions) {
+
+        //console.log(questions)
+
+        let s = "";
+        for (i in questions){
+          console.log(i) // q1
+          for (x in questions[i])
+            console.log(x) // kysymys1
+            for (const [key, value] of Object.entries(questions[i])) {
+
+              console.log(`${key}: ${value}`);// kysymys: objecti objecti
+
+              s += `<p>${key} :<p>`;
+
+              for (const [answerkey, choice] of Object.entries(value)) {
+                  let questionId = makeIdName(key, answerkey);
+                  console.log(questionId)
+                  s +=
+                    `<input type="radio" name="q${answerkey}" value="${choice}" id="${questionId}">` +
+                    `<label for="${questionId}">${choice.text}</label><br>`;
+            }
+          } 
+          
+        }
+        document.getElementById("dynamic").innerHTML = s;
+      }
+
+      // Point calculation
+      function reply() {
+        let points = 0;
+        for (let [i, question] of questions.entries()) {
+          for (let [j, choice] of question.choices.entries()) {
+            if (document.getElementById(makeIdName(i, j)).checked) {
+              points += choice.value;
+            }
+          }
+        }
+        document.getElementById("id_result").innerHTML = points;
+      }
+    </script>
+  </head>
+
+
+  <body onload="makeQuestions()">
+    <forms actions="" method="get" name="myform">
+      <div id="dynamic"></div>
+      <br />
+      <input type="button" value="Answer" onlick="reply()" />
+    </forms>
+    <div id="id_result"></div>
 
     <!--Make a single page multiple choice quiz app using JavaScript and JSON. There should be at least 3 different multiple 
         choice questions and they should be stored in a separate JSON file called questions.json. 
@@ -15,13 +82,11 @@
         code will first verify if the user has replied all the questions, then it will display how many questions the user got correct.
 
         Tip: You need a web server to make this work. In other words trying to load JSON file from local file system is going to fail. 
-        If you choose to use normal .js file instead, you will not get full points from this assignment. 
 
         You can use either fetch API or jQuery $.getJSON(url) to fetch the JSON data from specified URL. 
         jQuery can also be useful to find the radio buttons the user has clicked, but you can complete the assignment 
         without using jQuery at all.
 
         Use Bootstrap or similar library to make the web page responsive (mobile friendly).-->
-    
-</body>
+  </body>
 </html>
