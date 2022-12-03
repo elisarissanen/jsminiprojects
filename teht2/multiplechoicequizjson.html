@@ -20,7 +20,8 @@
 
       // SELVITÄ VIDEOSTA MITÄ TÄÄ TEKEE
       function makeIdName(questionIndex, choiceIndex) {
-        return `q_${questionIndex}_${choiceIndex}`;
+        //return `q_${questionIndex}_${choiceIndex}`;
+        return `${questionIndex}_${choiceIndex}`;
       }
 
       function makeQuestions(questions) {
@@ -29,21 +30,24 @@
 
         let s = "";
         for (i in questions){
-          console.log(i) // q1
+          //console.log(i) // q1
           for (x in questions[i])
-            console.log(x) // kysymys1
+            //console.log(x) // kysymys1
             for (const [key, value] of Object.entries(questions[i])) {
 
-              console.log(`${key}: ${value}`);// kysymys: objecti objecti
+              //console.log(`${key}: ${value}`);// kysymys: objecti objecti
 
               s += `<p>${key} :<p>`;
 
               for (const [answerkey, choice] of Object.entries(value)) {
-                  let questionId = makeIdName(key, answerkey);
-                  console.log(questionId)
-                  s +=
-                    `<input type="radio" name="q${answerkey}" value="${choice}" id="${questionId}">` +
-                    `<label for="${questionId}">${choice.text}</label><br>`;
+                    //console.log(answerkey) // a1, a2
+                    //console.log(choice) // ['Kysymys', pistemäärä]
+                    let questionId = makeIdName(choice[0], choice[1])
+                    console.log(questionId)
+
+                    s +=
+                      `<input type="radio" name="q${answerkey}" value="${choice[0]}" id="${questionId}">` +
+                      `<label for="${questionId}">${choice[0]}</label><br>`;
             }
           } 
           
