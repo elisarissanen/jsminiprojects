@@ -50,25 +50,37 @@
         }
       }
 
+      function checkradiochecked(i) {
+        var inputs = document.getElementsByName(i);
+        for (var i = 0; i < inputs.length; i++) {
+          if (inputs[i].checked) {
+            return inputs[i].value;
+          }
+        }
+      }
+
       // Point calculation
       function reply() {
         // event.preventDefault();
         let points = 0;
 
         for (i in ajaxresponse) {
-          for (const [key, value] of Object.entries(ajaxresponse[i])) {
-            for (const [answerkey, choice] of Object.entries(value)) {
+          if (checkradiochecked(i)) {
+            //console.log(checkradiochecked(i))
 
-
-
-              if (document.getElementById(makeIdName(choice[0], choice[1])).checked) {
-                points += choice[1];
+            for (const [key, value] of Object.entries(ajaxresponse[i])) {
+              for (const [answerkey, choice] of Object.entries(value)) {
+                if (document.getElementById(makeIdName(choice[0], choice[1])).checked) {
+                  points += choice[1];
+                }
               }
             }
+            document.getElementById("id_result").innerHTML =
+              "Your points: " + points;
+          } else {
+            document.getElementById("id_result").innerHTML = "<span style='color: red;'>Select each option</span>";
+            break;
           }
-
-          document.getElementById("id_result").innerHTML =
-            "Your points: " + points;
         }
       }
     </script>
