@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Function calculator</title>
+
+    <script>
+      function calculate() {
+        // try: Eval
+        // catch: SyntaxError popup
+      }
+    </script>
+
+    <style>
+      label {
+        display: inline-block;
+        width: 175px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Function Calculator</h1>
+    <form id="myform">
+      <!-- function, text field e.g. x*x or sin(x)/x -->
+      <label for="id_function">Function f(x) return value:</label>
+      <input type="text" name="function" id="id_function" size="10" /><br />
+
+      <!-- start of x range or the smallest x value, number field e.g. 0 -->
+      <label for="id_startrange">Start of x range:</label>
+      <input type="text" name="startrange" id="id_startrange" size="10" /><br />
+
+      <!-- end of x range or the highest x value, number field e.g. 100 -->
+      <label for="id_endrange">End of x range:</label>
+      <input type="text" name="endrange" id="id_endrange" size="10" /><br />
+
+      <!-- x step, number field e.g. 1 -->
+      <label for="id_step">x step:</label>
+      <input type="text" name="step" id="id_step" size="10" /><br />
+
+      <!-- NOT NECESARILY NEEDED: y scale factor, number field e.g. 1 -->
+      <label for="id_scale">y scale factor:</label>
+      <input type="text" name="scale" id="id_scale" size="10" /><br />
+
+      <input
+        type="button"
+        value="Calculate"
+        id="id_button"
+        onclick="calculate()"
+      />
+    </form>
+
+    <!--  If you use chart.js, then make sure have as many labels as you have data points under datasets. 
+    You need to create just one instance of Chart and keep updating it according to the changes in the input form.
+    
+    Example run:
+    
+    function = x*x
+    start of x = 0
+    end of x = 10
+    x step = 1
+    y step = 1
+    f(0) = 0
+    f(1) = 1
+    f(2) = 4
+    f(3) = 9
+    f(4) = 16
+    f(5) = 25
+    f(6) = 36
+    f(7) = 49
+    f(8) = 64
+    f(9) = 81
+    f(10) = 100-->
+  </body>
+</html>
