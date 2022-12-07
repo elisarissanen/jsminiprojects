@@ -5,10 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Function calculator</title>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
       function calculate() {
-        // try: Eval
-        // catch: SyntaxError popup
+        try{
+            // Eval the function
+            var func = document.getElementById("id_function");
+            var ctx = document.getElementById("id_chart");
+        }
+        catch(e){
+            // SyntaxError popup
+        }
       }
     </script>
 
@@ -39,7 +46,7 @@
       <label for="id_step">x step:</label>
       <input type="text" name="step" id="id_step" size="10" /><br />
 
-      <!-- NOT NECESARILY NEEDED: y scale factor, number field e.g. 1 -->
+      <!-- NOT NECESARILY NEEDED with chart.js: y scale factor, number field e.g. 1 -->
       <label for="id_scale">y scale factor:</label>
       <input type="text" name="scale" id="id_scale" size="10" /><br />
 
@@ -48,7 +55,10 @@
         value="Calculate"
         id="id_button"
         onclick="calculate()"
-      />
+      /><br>
+
+      <canvas id="id_chart"></canvas> 
+      <output id="id_result" type="text">Result</output>
     </form>
 
     <!--  If you use chart.js, then make sure have as many labels as you have data points under datasets. 
