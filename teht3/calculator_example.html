@@ -49,10 +49,9 @@
     </form>
   </body>
   <script>
-    function fun1(x) {
-      var userfunc = document.getElementById("id_function").value;
-      //console.log((eval(userfunc))
+    function fun1(x, userfunc) {
       return eval(userfunc);
+      //console.log((eval(userfunc))
     }
     /*function fun2(x) {
         console.log(Math.cos(3 * x))
@@ -61,7 +60,6 @@
 
     function empty() {
       const context = canvas.getContext("2d");
-
       context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
@@ -81,6 +79,7 @@
       axes.doNegativeX = true;
 
       showAxes(ctx, axes);
+
       funGraph(ctx, axes, fun1, "rgb(11,153,11)", 1);
       //funGraph(ctx, axes, fun2, "rgb(66,44,255)", 2);
     }
@@ -115,9 +114,19 @@
       ctx.lineWidth = thick;
       ctx.strokeStyle = color;
 
+      var userfunc = document.getElementById("id_function").value;
+      try{
+        eval(userfunc);
+      }
+      catch{
+        alert("Do not hack plz :)");
+        return;
+      }
+      //console.log("I have been hacked")
+
       for (var i = iMin; i <= iMax; i++) {
         xx = dx * i;
-        yy = scale * func(xx / scale);
+        yy = scale * func(xx / scale, userfunc);
         if (i == iMin) ctx.moveTo(x0 + xx, y0 - yy);
         else ctx.lineTo(x0 + xx, y0 - yy);
       }
