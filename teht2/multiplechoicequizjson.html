@@ -4,8 +4,9 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
     <title>Multiple choice quiz</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
 
     <script>
       var ajaxresponse;
@@ -83,20 +84,28 @@
           }
         }
       }
+      
     </script>
+    <style>
+      #container {
+        margin: auto;
+        padding: 5px;
+        max-width: 600px;
+        
+      }
+    </style>
   </head>
 
   <body onload="makeQuestions()">
+    <div id="container">
     <form action="" method="get" name="myform">
       <div id="dynamic"></div>
       <br />
       <input type="button" value="Answer" onclick="reply()" />
     </form>
     <div id="id_result"></div>
-
-    <!--After the user presses a button the JavaScript 
-        code will first verify if the user has replied all the questions, then it will display how many questions the user got correct.
-
+  </div>
+    <!--
         Use Bootstrap or similar library to make the web page responsive (mobile friendly).-->
   </body>
 </html>
