@@ -5,18 +5,160 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Function calculator</title>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+      var func = "";
+      var start = "";
+      var end = "";
+      var step = "";
+      var scale ="";
+      var width = 0;
+      var height = 0;
+
+      var F = function (x) {
+        return Math.sin(x);
+      };
+
       function calculate() {
-        try{
-            // Eval the function
-            var func = document.getElementById("id_function");
-            var ctx = document.getElementById("id_chart");
-        }
-        catch(e){
-            // SyntaxError popup
+        try {
+          // Eval the function
+          var ufunc = document.getElementById("id_function");
+          var start = document.getElementById("id_startrange"); // MinX
+          var end = document.getElementById("id_endrange"); // MaxX
+          var step = document.getElementById("id_step");
+          var scale = document.getElementById("id_step");
+
+          var canvas = document.getElementById("id_chart");
+          var width = canvas.width;
+          var height = canvas.height;
+
+          console.log(ufunc)
+          console.log(ufunc.value)
+          var f = eval(ufunc.value);
+          console.log(f)
+
+          ctx = canvas.getContext("2d");
+          ctx.clearRect(0, 0, width, height);
+
+          //DrawAxes();
+          console.log(ufunc, start, end, step)
+          RenderFunction(ufunc, start, end, step);
+        } catch (e) {
+          // SyntaxError popup
+          console.log(e)
         }
       }
+
+      // RenderFunction(f) renders the input funtion f on the canvas.
+      function RenderFunction(ufunc, start, end, step) {
+        var first = true;
+        console.log("Trying to render")
+
+        ctx.beginPath();
+        for (var x = start; x <= end; x += step) {
+          console.log("Entered for loop")
+          var y = ufunc(x);
+          if (first) {
+            ctx.moveTo(XC(x), YC(y));
+            first = false;
+          } else {
+            ctx.lineTo(XC(x), YC(y));
+          }
+        }
+        ctx.stroke();
+      }
+
+      function XC(x) {
+        return (x - start) / (end - start) * width ;
+      }
+
+      function YC(y) {
+        return height - (y - MinY()) / (MaxY() - MinY()) * height ;
+      }
+
+      // Returns the top boundary of the logical viewport:
+      function MaxY() {
+        return end * height / width;
+      }
+
+      // Returns the bottom boundary of the logical viewport:
+      function MinY() {
+        return start * height / width;
+      }
+
+      /*
+      // Returns the distance between ticks on the X axis:
+      function XTickDelta() {
+        return 1;
+      }
+
+      // Returns the distance between ticks on the Y axis:
+      function YTickDelta() {
+        return 1;
+      }
+
+      // DrawAxes draws the X ad Y axes, with tick marks.
+      function DrawAxes() {
+        ctx.save();
+        ctx.lineWidth = 2;
+        // +Y axis
+        ctx.beginPath();
+        ctx.moveTo(XC(0), YC(0));
+        ctx.lineTo(XC(0), YC(MaxY()));
+        ctx.stroke();
+
+        // -Y axis
+        ctx.beginPath();
+        ctx.moveTo(XC(0), YC(0));
+        ctx.lineTo(XC(0), YC(MinY()));
+        ctx.stroke();
+
+        // Y axis tick marks
+        var delta = YTickDelta();
+        for (var i = 1; i * delta < MaxY(); ++i) {
+          ctx.beginPath();
+          ctx.moveTo(XC(0) - 5, YC(i * delta));
+          ctx.lineTo(XC(0) + 5, YC(i * delta));
+          ctx.stroke();
+        }
+
+        var delta = YTickDelta();
+        for (var i = 1; i * delta > MinY(); --i) {
+          ctx.beginPath();
+          ctx.moveTo(XC(0) - 5, YC(i * delta));
+          ctx.lineTo(XC(0) + 5, YC(i * delta));
+          ctx.stroke();
+        }
+
+        // +X axis
+        ctx.beginPath();
+        ctx.moveTo(XC(0), YC(0));
+        ctx.lineTo(XC(end), YC(0));
+        ctx.stroke();
+
+        // -X axis
+        ctx.beginPath();
+        ctx.moveTo(XC(0), YC(0));
+        ctx.lineTo(XC(start), YC(0));
+        ctx.stroke();
+
+        // X tick marks
+        var delta = XTickDelta();
+        for (var i = 1; i * delta < end; ++i) {
+          ctx.beginPath();
+          ctx.moveTo(XC(i * delta), YC(0) - 5);
+          ctx.lineTo(XC(i * delta), YC(0) + 5);
+          ctx.stroke();
+        }
+
+        var delta = XTickDelta();
+        for (var i = 1; i * delta > start; --i) {
+          ctx.beginPath();
+          ctx.moveTo(XC(i * delta), YC(0) - 5);
+          ctx.lineTo(XC(i * delta), YC(0) + 5);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }*/
     </script>
 
     <style>
@@ -55,9 +197,9 @@
         value="Calculate"
         id="id_button"
         onclick="calculate()"
-      /><br>
+      /><br />
 
-      <canvas id="id_chart"></canvas> 
+      <canvas id="id_chart" width="535" height="300"></canvas>
       <output id="id_result" type="text">Result</output>
     </form>
 

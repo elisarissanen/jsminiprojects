@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Function Calculator</title>
+
+    <style>
+      label {
+        display: inline-block;
+        width: 175px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Function Calculator</h1>
+    <form id="myform">
+      <!-- function, text field e.g. x*x or sin(x)/x -->
+      <label for="id_function">Function f(x) return value:</label>
+      <input type="text" name="function" id="id_function" size="10" /><br />
+
+      <!-- start of x range or the smallest x value, number field e.g. 0 -->
+      <label for="id_startrange">Start of x range:</label>
+      <input type="text" name="startrange" id="id_startrange" size="10" /><br />
+
+      <!-- end of x range or the highest x value, number field e.g. 100 -->
+      <label for="id_endrange">End of x range:</label>
+      <input type="text" name="endrange" id="id_endrange" size="10" /><br />
+
+      <!-- x step, number field e.g. 1 -->
+      <label for="id_step">x step:</label>
+      <input type="text" name="step" id="id_step" size="10" /><br />
+
+      <!-- NOT NECESARILY NEEDED with chart.js: y scale factor, number field e.g. 1 -->
+      <label for="id_scale">y scale factor:</label>
+      <input type="text" name="scale" id="id_scale" size="10" /><br />
+
+      <input type="button" value="Calculate" id="id_button" onclick="draw()" />
+
+      <input
+        type="button"
+        value="Clear"
+        id="id_empty"
+        onclick="empty()"
+      /><br />
+
+      <canvas id="canvas" width="535" height="300"></canvas>
+    </form>
+  </body>
+  <script>
+    function fun1(x) {
+      var userfunc = document.getElementById("id_function").value;
+      return eval(userfunc);
+    }
+    /*function fun2(x) {
+        console.log(Math.cos(3 * x))
+        return Math.cos(3 * x);
+    }*/
+
+    function empty() {
+      const context = canvas.getContext("2d");
+
+      context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function draw() {
+      var canvas = document.getElementById("canvas");
+      if (null == canvas || !canvas.getContext) return;
+
+      var axes = {},
+        ctx = canvas.getContext("2d");
+      axes.x0 = 0.5 + 0.5 * canvas.width; // x0 pixels from left to x=0
+      axes.y0 = 0.5 + 0.5 * canvas.height; // y0 pixels from top to y=0
+      axes.scale = document.getElementById("id_scale").value * 10;
+      //axes.scale = 40 // 40 pixels from x=0 to x=1
+      axes.doNegativeX = true;
+
+      showAxes(ctx, axes);
+      funGraph(ctx, axes, fun1, "rgb(11,153,11)", 1);
+      //funGraph(ctx, axes, fun2, "rgb(66,44,255)", 2);
+    }
+
+    function funGraph(ctx, axes, func, color, thick) {
+      var xx,
+        yy,
+        dx = 4,
+        x0 = axes.x0,
+        y0 = axes.y0,
+        scale = axes.scale;
+      var iMax = Math.round((ctx.canvas.width - x0) / dx);
+      var iMin = axes.doNegativeX ? Math.round(-x0 / dx) : 0;
+      ctx.beginPath();
+      ctx.lineWidth = thick;
+      ctx.strokeStyle = color;
+
+      for (var i = iMin; i <= iMax; i++) {
+        xx = dx * i;
+        yy = scale * func(xx / scale);
+        if (i == iMin) ctx.moveTo(x0 + xx, y0 - yy);
+        else ctx.lineTo(x0 + xx, y0 - yy);
+      }
+      ctx.stroke();
+    }
+
+    function showAxes(ctx, axes) {
+      var x0 = axes.x0,
+        w = ctx.canvas.width;
+      var y0 = axes.y0,
+        h = ctx.canvas.height;
+      var xmin = axes.doNegativeX ? 0 : x0;
+      ctx.beginPath();
+      ctx.strokeStyle = "rgb(128,128,128)";
+      ctx.moveTo(xmin, y0);
+      ctx.lineTo(w, y0); // X axis
+      ctx.moveTo(x0, 0);
+      ctx.lineTo(x0, h); // Y axis
+      ctx.stroke();
+    }
+  </script>
+</html>
