@@ -51,6 +51,7 @@
   <script>
     function fun1(x) {
       var userfunc = document.getElementById("id_function").value;
+      //console.log((eval(userfunc))
       return eval(userfunc);
     }
     /*function fun2(x) {
@@ -73,6 +74,9 @@
       axes.x0 = 0.5 + 0.5 * canvas.width; // x0 pixels from left to x=0
       axes.y0 = 0.5 + 0.5 * canvas.height; // y0 pixels from top to y=0
       axes.scale = document.getElementById("id_scale").value * 10;
+      if(axes.scale == ""){
+        axes.scale = 40
+      }
       //axes.scale = 40 // 40 pixels from x=0 to x=1
       axes.doNegativeX = true;
 
@@ -84,12 +88,29 @@
     function funGraph(ctx, axes, func, color, thick) {
       var xx,
         yy,
-        dx = 4,
+        dx = document.getElementById("id_step").value
+        if (dx == ""){
+          dx = 4
+        }
+        //dx = 4,
         x0 = axes.x0,
         y0 = axes.y0,
         scale = axes.scale;
-      var iMax = Math.round((ctx.canvas.width - x0) / dx);
-      var iMin = axes.doNegativeX ? Math.round(-x0 / dx) : 0;
+      //var iMax = Math.round((ctx.canvas.width - x0) / dx);
+      
+      var iMax = document.getElementById("id_endrange").value;
+      if (iMax == ""){
+        iMax = Math.round((ctx.canvas.width - x0) / dx);
+      }
+
+      //var iMin = axes.doNegativeX ? Math.round(-x0 / dx) : 0;
+      //console.log(iMin)
+      var iMin = document.getElementById("id_startrange").value;
+
+      if (iMin == ""){
+        iMin = axes.doNegativeX ? Math.round(-x0 / dx) : 0;      
+      }
+
       ctx.beginPath();
       ctx.lineWidth = thick;
       ctx.strokeStyle = color;
